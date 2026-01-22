@@ -10,6 +10,7 @@ RUN apt-get update && \
     curl \
     openssl \
     ca-certificates \
+    dos2unix \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -19,8 +20,9 @@ WORKDIR /app
 # 复制启动脚本
 COPY start.sh /app/start.sh
 
-# 给启动脚本执行权限
-RUN chmod +x /app/start.sh
+# 转换行结束符并给启动脚本执行权限
+RUN dos2unix /app/start.sh && \
+    chmod +x /app/start.sh
 
 # 暴露可能使用的端口（根据脚本内容，这些是可配置的端口）
 EXPOSE 8080 8443 9443
